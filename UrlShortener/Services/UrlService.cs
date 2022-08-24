@@ -1,28 +1,38 @@
-﻿using Microsoft.AspNetCore.WebUtilities;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.WebUtilities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UrlShortener.Services
 {
     public class UrlService : IUrlService
     {
-        private const int ENCODING_BASE_CODE = 123456789;
+        private int ENCODING_BASE_CODE = new Random().Next(100_000, 99_999_999);
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public string GenerateShortUrl(string url)
+        public UrlService(IHttpContextAccessor httpContextAccessor)
         {
-            var requestedUrl = "http://www.google.com";
+            _httpContextAccessor = httpContextAccessor;
+        }
 
-            var chunk = WebEncoders.Base64UrlEncode(BitConverter.GetBytes(ENCODING_BASE_CODE));
+        
 
-            return string.Empty;
+        public string GetShortUrl(string url)
+        {
+            return GenerateShortUrl(url);
         }
 
         public string DecodeShortUrl(string shortUrl)
         {
             return string.Empty;
+        }
+
+        private string GenerateShortUrl(string url)
+        {
+            var rootUrl = _httpContextAccessor.HttpContext.Request.Host.Value;
+
+            var shortCode = WebEncoders.Base64UrlEncode(BitConverter.GetBytes(ENCODING_BASE_CODE));
+
+            return $"{rootUrl}/{shortCode}";
         }
     }
 }
