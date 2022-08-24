@@ -1,3 +1,4 @@
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using UrlShortener.Models.ViewModels;
@@ -24,10 +25,12 @@ namespace UrlShortener.Controllers
 
 
         [HttpPost]
-        public IActionResult Index(ShortenerViewModel viewModel)
+        public IActionResult Index(ShortenerViewModel vm)
         {
-            viewModel.ShortenedUrl = $"{viewModel.Url} - but shorter";
-            return View(viewModel);
+            var shortUrl = _urlService.GetShortUrl(vm.Url);
+            vm.ShortenedUrl = shortUrl;
+
+            return View(vm);
         }
 
         [HttpGet, Route("{shortCode}")]
