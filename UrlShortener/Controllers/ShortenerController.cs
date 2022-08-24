@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using UrlShortener.Models.ViewModels;
 using UrlShortener.Services;
@@ -27,8 +26,7 @@ namespace UrlShortener.Controllers
         [HttpPost]
         public IActionResult Index(ShortenerViewModel vm)
         {
-            var shortUrl = _urlService.GetShortUrl(vm.Url);
-            vm.ShortenedUrl = shortUrl;
+            vm.ShortenedUrl = _urlService.GetShortUrl(vm.Url);
 
             return View(vm);
         }
@@ -36,7 +34,8 @@ namespace UrlShortener.Controllers
         [HttpGet, Route("{shortCode}")]
         public IActionResult Index(string shortCode)
         {
-            return Redirect("https://www.google.com");
+            var url = _urlService.DecodeShortUrl(shortCode);
+            return Redirect(url);
         }
     }
 }
