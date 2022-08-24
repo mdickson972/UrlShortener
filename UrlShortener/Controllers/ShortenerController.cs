@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using UrlShortener.Models.ViewModels;
 using UrlShortener.Services;
 
 namespace UrlShortener.Controllers
 {
-    [Route("/")]
     public class ShortenerController : Controller
     {
         private readonly IUrlService _urlService;
@@ -29,6 +28,12 @@ namespace UrlShortener.Controllers
         {
             viewModel.ShortenedUrl = $"{viewModel.Url} - but shorter";
             return View(viewModel);
+        }
+
+        [HttpGet, Route("{shortCode}")]
+        public IActionResult Index(string shortCode)
+        {
+            return Redirect("https://www.google.com");
         }
     }
 }
