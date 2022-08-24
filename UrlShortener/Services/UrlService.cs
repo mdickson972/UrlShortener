@@ -10,24 +10,29 @@ namespace UrlShortener.Services
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IDataService _dataService;
-
         private readonly int ENCODING_BASE_CODE = new Random().Next(100_000, 99_999_999);
+
+        private List<UrlMap> _urlMaps;
 
         public UrlService(IHttpContextAccessor httpContextAccessor, IDataService dataService)
         {
             _httpContextAccessor = httpContextAccessor;
             _dataService = dataService;
+
+            _urlMaps = _dataService.Get<List<UrlMap>>();
+            if(_urlMaps == null)
+            {
+                _dataService.Add(new List<UrlMap>());
+            }
         }
 
         public string GetShortUrl(string url)
         {
-            var mappedUrls = _dataService.Get<List<UrlMap>>();
-
-            if (!mappedUrls.Exists(x => x.Url.Equals(url)))
+            if (!_urlMaps.Exists(x => x.Url.Equals(url)))
             {
                 var shortCode = GenerateShortCode();
                 var shortUrl = GenerateShortUrl(shortCode);
-                mappedUrls.Add(
+                _urlMaps.Add(
                     new UrlMap
                     {
                         Url = url,
@@ -35,17 +40,17 @@ namespace UrlShortener.Services
                         ShortUrl = shortUrl
                     });
 
-                _dataService.Add(mappedUrls);
+                _dataService.Add(_urlMaps);
 
                 return shortUrl;
             }
 
-            return mappedUrls.Find(x => x.Url.Equals(url)).ShortUrl;
+            return _urlMaps.Find(x => x.Url.Equals(url)).ShortUrl;
         }
 
-        public string DecodeShortUrl(string shortUrl)
+        public string DecodeShortUrl(string shortCode)
         {
-            return string.Empty;
+            return _urlMaps.Find(x => x.ShortCode.Equals(shortCode)).Url;
         }
 
         private string GenerateShortCode()
@@ -56,7 +61,7 @@ namespace UrlShortener.Services
         private string GenerateShortUrl(string shortCode)
         {
             var rootUrl = _httpContextAccessor.HttpContext.Request.Host.Value;
-            return $"{rootUrl}/{shortCode}";
+            return $"https://{rootUrl}/{shortCode}";
         }
     }
 }
