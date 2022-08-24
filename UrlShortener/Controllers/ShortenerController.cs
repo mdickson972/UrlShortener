@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using UrlShortener.Models.ViewModels;
+using UrlShortener.Services;
 
 namespace UrlShortener.Controllers
 {
     [Route("/")]
     public class ShortenerController : Controller
     {
+        private readonly IUrlService _urlService;
         private readonly ILogger<ShortenerController> _logger;
 
-        public ShortenerController(ILogger<ShortenerController> logger)
+        public ShortenerController(IUrlService urlService, ILogger<ShortenerController> logger)
         {
+            _urlService = urlService;
             _logger = logger;
         }
 
@@ -24,6 +27,7 @@ namespace UrlShortener.Controllers
         [HttpPost]
         public IActionResult Index(ShortenerViewModel viewModel)
         {
+            viewModel.ShortenedUrl = $"{viewModel.Url} - but shorter";
             return View(viewModel);
         }
     }
