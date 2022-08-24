@@ -21,6 +21,7 @@
 
 @if (!string.IsNullOrEmpty(Model.ShortenedUrl)) { 
     <div class="text-center">
+        <label asp-for="ShortenedUrl"></label>
         <input asp-for="ShortenedUrl" type="text" class="col col-8" />
     </div>
 }
