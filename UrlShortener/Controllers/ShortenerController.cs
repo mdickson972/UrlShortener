@@ -17,10 +17,8 @@ namespace UrlShortener.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
-        {
-            return View(new ShortenerViewModel());
-        }
+        public IActionResult Index() => View(new ShortenerViewModel());
+
 
 
         [HttpPost]
@@ -36,5 +34,8 @@ namespace UrlShortener.Controllers
             var url = _urlService.DecodeShortUrl(shortCode);
             return Redirect(url);
         }
+
+        [HttpGet]
+        public IActionResult Error() => View();
     }
 }

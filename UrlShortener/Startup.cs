@@ -35,7 +35,7 @@ namespace UrlShortener
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/Shortener/Error");
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
