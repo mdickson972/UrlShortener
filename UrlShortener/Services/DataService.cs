@@ -14,6 +14,11 @@ namespace UrlShortener.Services
             var urlMapFileName = "urlMap.json";
 
             filePath = $"{rootDataDirectory}/{urlMapFileName}";
+
+            if (!File.Exists(filePath))
+            {
+                File.WriteAllText(filePath, string.Empty);
+            }
         }
 
         public void Add<T>(T content)
@@ -25,7 +30,10 @@ namespace UrlShortener.Services
         public T Get<T>()
         {
             var contentString = ReadFile();
-            return JsonConvert.DeserializeObject<T>(contentString);
+
+            return !string.IsNullOrEmpty(contentString)
+                ? JsonConvert.DeserializeObject<T>(contentString)
+                : (T)Activator.CreateInstance(typeof(T));
         }
 
         /// <summary>

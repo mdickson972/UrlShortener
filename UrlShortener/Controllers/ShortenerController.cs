@@ -27,7 +27,6 @@ namespace UrlShortener.Controllers
         public IActionResult Index(ShortenerViewModel vm)
         {
             vm.ShortenedUrl = _urlService.GetShortUrl(vm.Url);
-
             return View(vm);
         }
 
