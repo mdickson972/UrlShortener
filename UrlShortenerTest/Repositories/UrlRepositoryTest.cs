@@ -24,19 +24,51 @@ namespace UrlShortenerTest.Repositories
         public void GetShortUrl_WhenCallingGetShortUrl_WithPreviouslyPersistedUrl_ShortUrlIsReturned()
         {
             // Arrange
-            var orgUrl = "www.test.com";
-            var expectedShortCode = "abcdef";
-            var expectedShortUrl = $"{ROOT_URL}/abcdef";
+            var urlMap = new UrlMap { Url = "www.test.com", ShortCode = "abcdef", ShortUrl = $"{ROOT_URL}/abcdef" };
+            var urlMapList = new List<UrlMap> { urlMap };
+            var expected = urlMap.ShortUrl;
 
-            var urlMap = new List<UrlMap>() { new UrlMap { Url = orgUrl, ShortCode = expectedShortCode, ShortUrl = expectedShortUrl } };
-
-            mockDataRepository.Setup(s => s.Get<List<UrlMap>>()).Returns(urlMap);
+            mockDataRepository.Setup(s => s.Get<List<UrlMap>>()).Returns(urlMapList);
 
             // Act
-            var actual = urlRepository.GetShortUrl(orgUrl);
+            var actual = urlRepository.GetShortUrl(urlMap.Url);
 
             // Assert
-            Assert.Equal(expectedShortUrl, actual);
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void DecodeShortUrl_WhenCallingDecodeShortUrl_WithValidShortUrl_FullUrlIsReturned()
+        {
+            // Arrange
+            var urlMap = new UrlMap { Url = "www.test.com", ShortCode = "abcdef", ShortUrl = $"{ROOT_URL}/abcdef" };
+            var urlMapList = new List<UrlMap> { urlMap };
+            var expected = urlMap.Url;
+
+            mockDataRepository.Setup(s => s.Get<List<UrlMap>>()).Returns(urlMapList);
+
+            // Act
+            var actual = urlRepository.DecodeShortUrl(urlMap.ShortCode);
+
+            // Assert
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void DecodeShortUrl_WhenCallingDecodeShortUrl_WithInvalidShortUrl_NullStringIsReturned()
+        {
+            // Arrange
+            var urlMap = new UrlMap { Url = "www.test.com", ShortCode = "abcdef", ShortUrl = $"{ROOT_URL}/abcdef" };
+            var urlMapList = new List<UrlMap> { urlMap };
+            var invalidShortCode = "invalid";
+
+            mockDataRepository.Setup(s => s.Get<List<UrlMap>>()).Returns(urlMapList);
+
+            // Act
+            var result = urlRepository.DecodeShortUrl(invalidShortCode);
+
+            // Assert
+            Assert.Null(result);
         }
     }
 }
