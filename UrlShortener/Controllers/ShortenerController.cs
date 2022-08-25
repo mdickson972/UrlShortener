@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UrlShortener.Models.ViewModels;
-using UrlShortener.Services;
+using UrlShortener.Repositories;
 
 namespace UrlShortener.Controllers
 {
     public class ShortenerController : Controller
     {
-        private readonly IUrlService _urlService;
+        private readonly IUrlRepository _urlService;
 
-        public ShortenerController(IUrlService urlService)
+        public ShortenerController(IUrlRepository urlService)
         {
             _urlService = urlService;
         }

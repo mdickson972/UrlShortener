@@ -2,13 +2,13 @@
 using System;
 using System.IO;
 
-namespace UrlShortener.Services
+namespace UrlShortener.Repositories
 {
-    public class DataService : IDataService
+    public class DataRepository : IDataRepository
     {
         private string filePath;
 
-        public DataService()
+        public DataRepository()
         {
             // Generates path to file to be used as data source.
             var rootDataDirectory = Path.Combine(Environment.CurrentDirectory, "Data");

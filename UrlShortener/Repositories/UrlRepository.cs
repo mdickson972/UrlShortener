@@ -5,16 +5,16 @@ using System.Collections.Generic;
 using System.Linq;
 using UrlShortener.Models;
 
-namespace UrlShortener.Services
+namespace UrlShortener.Repositories
 {
-    public class UrlService : IUrlService
+    public class UrlRepository : IUrlRepository
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IDataService _dataService;
+        private readonly IDataRepository _dataService;
 
         private readonly int ENCODING_BASE_CODE = new Random().Next(100_000, 99_999_999);
 
-        public UrlService(IHttpContextAccessor httpContextAccessor, IDataService dataService)
+        public UrlRepository(IHttpContextAccessor httpContextAccessor, IDataRepository dataService)
         {
             _httpContextAccessor = httpContextAccessor;
             _dataService = dataService;

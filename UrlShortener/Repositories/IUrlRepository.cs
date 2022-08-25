@@ -1,6 +1,6 @@
-﻿namespace UrlShortener.Services
+﻿namespace UrlShortener.Repositories
 {
-    public interface IUrlService
+    public interface IUrlRepository
     {
         /// <summary>
         /// Shortens given URL into a more managably lengthed link.

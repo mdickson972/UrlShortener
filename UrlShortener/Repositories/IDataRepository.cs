@@ -1,6 +1,6 @@
-﻿namespace UrlShortener.Services
+﻿namespace UrlShortener.Repositories
 {
-    public interface IDataService
+    public interface IDataRepository
     {
         /// <summary>
         /// Persist new data

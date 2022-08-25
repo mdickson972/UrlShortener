@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using UrlShortener.Services;
+using UrlShortener.Repositories;
 
 namespace UrlShortener
 {
@@ -21,8 +21,8 @@ namespace UrlShortener
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddScoped<IUrlService, UrlService>();
-            services.AddScoped<IDataService, DataService>();
+            services.AddScoped<IUrlRepository, UrlRepository>();
+            services.AddScoped<IDataRepository, DataRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
