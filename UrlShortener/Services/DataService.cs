@@ -12,13 +12,10 @@ namespace UrlShortener.Services
         {
             var rootDataDirectory = Path.Combine(Environment.CurrentDirectory, @"Data\");
             var urlMapFileName = "urlMap.json";
-
             filePath = $"{rootDataDirectory}/{urlMapFileName}";
 
-            if (!File.Exists(filePath))
-            {
-                File.WriteAllText(filePath, string.Empty);
-            }
+            VerifyDirectoryExists(rootDataDirectory);
+            VerifyFileExists(filePath);
         }
 
         public void Add<T>(T content)
@@ -48,6 +45,22 @@ namespace UrlShortener.Services
         private string ReadFile()
         {
             return File.ReadAllText(filePath);
+        }
+
+        private void VerifyDirectoryExists(string directoryPath)
+        {
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+        }
+
+        private void VerifyFileExists(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                File.WriteAllText(filePath, string.Empty);
+            }
         }
     }
 }
