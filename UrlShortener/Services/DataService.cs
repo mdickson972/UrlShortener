@@ -11,7 +11,7 @@ namespace UrlShortener.Services
         public DataService()
         {
             // Generates path to file to be used as data source.
-            var rootDataDirectory = Path.Combine(Environment.CurrentDirectory, @"Data\");
+            var rootDataDirectory = Path.Combine(Environment.CurrentDirectory, "Data");
             var urlMapFileName = "urlMap.json";
             filePath = $"{rootDataDirectory}/{urlMapFileName}";
 
