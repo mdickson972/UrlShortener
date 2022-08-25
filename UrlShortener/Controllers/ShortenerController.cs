@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using UrlShortener.Models.ViewModels;
 using UrlShortener.Services;
 
@@ -8,18 +7,14 @@ namespace UrlShortener.Controllers
     public class ShortenerController : Controller
     {
         private readonly IUrlService _urlService;
-        private readonly ILogger<ShortenerController> _logger;
 
-        public ShortenerController(IUrlService urlService, ILogger<ShortenerController> logger)
+        public ShortenerController(IUrlService urlService)
         {
             _urlService = urlService;
-            _logger = logger;
         }
 
         [HttpGet]
         public IActionResult Index() => View(new ShortenerViewModel());
-
-
 
         [HttpPost]
         public IActionResult Index(ShortenerViewModel vm)
@@ -29,9 +24,13 @@ namespace UrlShortener.Controllers
         }
 
         [HttpGet, Route("{shortCode}")]
-        public IActionResult Index(string shortCode)
+        public IActionResult Redirection(string shortCode)
         {
             var url = _urlService.DecodeShortUrl(shortCode);
+
+            // If shortened url is not valid, redirect to home page.
+            if (string.IsNullOrEmpty(url)) { return RedirectToAction("Index", "Shortener"); }
+                        
             return Redirect(url);
         }
 
