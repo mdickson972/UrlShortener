@@ -4,11 +4,11 @@ using System.IO;
 
 namespace UrlShortener.Repositories
 {
-    public class DataRepository : IDataRepository
+    public class JsonTextFileRepository : IDataRepository
     {
         private string filePath;
 
-        public DataRepository()
+        public JsonTextFileRepository()
         {
             // Generates path to file to be used as data source.
             var rootDataDirectory = Path.Combine(Environment.CurrentDirectory, "Data");

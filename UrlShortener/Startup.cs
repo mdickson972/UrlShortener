@@ -22,7 +22,7 @@ namespace UrlShortener
         {
             services.AddControllersWithViews();
             services.AddScoped<IUrlRepository, UrlRepository>();
-            services.AddScoped<IDataRepository, DataRepository>();
+            services.AddScoped<IDataRepository, JsonTextFileRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 

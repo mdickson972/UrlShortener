@@ -10,20 +10,20 @@ namespace UrlShortener.Repositories
     public class UrlRepository : IUrlRepository
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IDataRepository _dataService;
+        private readonly IDataRepository _dataRepository;
 
         private readonly int ENCODING_BASE_CODE = new Random().Next(100_000, 99_999_999);
 
-        public UrlRepository(IHttpContextAccessor httpContextAccessor, IDataRepository dataService)
+        public UrlRepository(IHttpContextAccessor httpContextAccessor, IDataRepository dataRepository)
         {
             _httpContextAccessor = httpContextAccessor;
-            _dataService = dataService;
+            _dataRepository = dataRepository;
         }
 
         public string GetShortUrl(string url)
         {
             // Retrieves list of mapped urls
-            var mappedUrls = _dataService.Get<List<UrlMap>>();
+            var mappedUrls = _dataRepository.Get<List<UrlMap>>();
 
             // If the passed url already exists, its shorturl is simply returned
             if (!mappedUrls.Any(x => x.Url.Equals(url)))
@@ -38,7 +38,7 @@ namespace UrlShortener.Repositories
                 // Adds new url to list of mapped urls to be persisted
                 mappedUrls.Add(new UrlMap { Url = url, ShortCode = shortCode, ShortUrl = shortUrl });
 
-                _dataService.Add(mappedUrls);
+                _dataRepository.Add(mappedUrls);
 
                 return shortUrl;
             }
@@ -48,7 +48,7 @@ namespace UrlShortener.Repositories
 
         public string DecodeShortUrl(string shortCode)
         {
-            var mappedUrls = _dataService.Get<List<UrlMap>>();
+            var mappedUrls = _dataRepository.Get<List<UrlMap>>();
 
             // Returns url that matches on the passed shortcode
             return mappedUrls.FirstOrDefault(x => x.ShortCode.Equals(shortCode))?.Url;
