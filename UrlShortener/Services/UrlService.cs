@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UrlShortener.Models;
 
 namespace UrlShortener.Services
@@ -23,9 +24,12 @@ namespace UrlShortener.Services
         {
             var mappedUrls = _dataService.Get<List<UrlMap>>();
 
-            if (!mappedUrls.Exists(x => x.Url.Equals(url)))
+            if (!mappedUrls.Any(x => x.Url.Equals(url)))
             {
-                var shortCode = GenerateShortCode();
+                var shortCode = string.Empty;
+                do { shortCode = GenerateShortCode(); }
+                while (mappedUrls.Any(x => x.ShortCode.Equals(shortCode)));
+
                 var shortUrl = GenerateShortUrl(shortCode);
                 mappedUrls.Add(new UrlMap { Url = url, ShortCode = shortCode, ShortUrl = shortUrl });
 
@@ -34,14 +38,14 @@ namespace UrlShortener.Services
                 return shortUrl;
             }
 
-            return mappedUrls.Find(x => x.Url.Equals(url)).ShortUrl;
+            return mappedUrls.FirstOrDefault(x => x.Url.Equals(url)).ShortUrl;
         }
 
         public string DecodeShortUrl(string shortCode)
         {
             var mappedUrls = _dataService.Get<List<UrlMap>>();
 
-            return mappedUrls.Find(x => x.ShortCode.Equals(shortCode)).Url;
+            return mappedUrls.FirstOrDefault(x => x.ShortCode.Equals(shortCode)).Url;
         }
 
         private string GenerateShortCode()
